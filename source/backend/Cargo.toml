@@ -1,0 +1,10 @@
+[package]
+name = "replay-analyzer"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+fnreplay.workspace = true
+chests.workspace = true
+serde_json.workspace = true

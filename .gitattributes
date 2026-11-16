@@ -1,0 +1,22 @@
+* text=auto
+*.cs text eol=crlf
+*.ps1 text eol=crlf
+*.cmd text eol=crlf
+*.rs text eol=lf
+*.md text eol=lf
+*.toml text eol=lf
+*.lock text eol=lf
+*.png binary
+
+# Defense in depth for git archive exports.
+data/** export-ignore
+**/*.replay export-ignore
+**/*.replay.* export-ignore
+**/*.json export-ignore
+**/*.json.* export-ignore
+**/*.csv export-ignore
+**/*.bak export-ignore
+**/*.tmp export-ignore
+bin/** export-ignore
+source/target/** export-ignore
+SHA256SUMS.txt export-ignore

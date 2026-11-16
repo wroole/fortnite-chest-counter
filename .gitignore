@@ -1,0 +1,45 @@
+# Private replay recordings, runtime statistics, exports, and diagnostic files.
+data/
+replays/
+Demos/
+exports/
+logs/
+work/
+dist/
+.local/
+*.replay
+*.replay.*
+*.dump
+# This project has no public JSON configuration; JSON files contain local results.
+*.json
+*.json.*
+*.csv
+*.tsv
+*.log
+*.bak
+*.tmp
+*.damaged-*
+
+# Credentials and machine-specific settings.
+.env
+.env.*
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Build outputs and local distributions.
+bin/
+target/
+*.exe
+*.dll
+*.pdb
+*.zip
+*.zip.sha256
+*.7z
+/ChestCounter.exe.config
+/SHA256SUMS.txt

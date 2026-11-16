@@ -1,0 +1,25 @@
+[workspace]
+resolver = "2"
+members = ["backend", "vendor/fnreplay", "vendor/chests"]
+default-members = ["backend"]
+
+[workspace.package]
+version = "1.1.4"
+edition = "2021"
+license = "Apache-2.0"
+rust-version = "1.92"
+publish = false
+
+[workspace.dependencies]
+fnreplay = { path = "vendor/fnreplay" }
+chests = { path = "vendor/chests" }
+serde = { version = "=1.0.229", features = ["derive"] }
+serde_json = "=1.0.154"
+thiserror = "=2.0.21"
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+strip = true
+panic = "unwind"

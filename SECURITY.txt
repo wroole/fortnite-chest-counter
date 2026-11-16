@@ -1,0 +1,77 @@
+SECURITY REVIEW — 2026-11-16
+
+Scope
+The read-only parser is based on fnreplay and chests from:
+https://github.com/andruhan123YT/fortnite-chest-counter
+Reviewed revision: 34f939e85f4558fb717d9e8d390357d8f65fed8f.
+The original notices and dependency licenses are preserved in licenses/.
+Only those two libraries were vendored. The upstream desktop app, online sync,
+updater, autostart logic, account scripts, overlay, and HTTP server are excluded.
+
+Application behavior
+Reads selected .replay files and writes its own statistics beside the executable.
+Only the recording player's events are included in new parser output and saved
+statistics. Legacy team fields are ignored and omitted on the next save.
+Personal averages and forecasts are calculated locally without external APIs.
+Runs only its own bin/replay-analyzer.exe, with shell execution disabled and
+proper filename quoting. Does not make network requests, log in to accounts,
+install startup entries, inspect game memory, inject code, or modify recordings.
+The Windows manifest requests normal user privileges.
+Start.cmd opens the local application when its runtime files exist. For a source
+download, it runs source/build.ps1 and then opens the compiled application.
+The launcher installs nothing. The source build needs preinstalled Rust/C++ tools;
+Cargo may download pinned build dependencies. The ready-built app stays offline.
+The launcher's PowerShell execution policy applies only to that child process.
+
+Clear all data is disabled during an import and requires a separate dialog with
+the exact typed text DELETE. It resets only the managed statistics history and
+removes that history's backup, temporary, and damaged-history copies. It does not
+recursively delete a directory or remove Fortnite replay files or CSV exports.
+The confirmation gate, cancellation, empty-history persistence, backup cleanup,
+and preservation of replay files were checked using isolated test data.
+
+Build provenance and dependencies
+Third-party prebuilt application executables were not downloaded or run.
+The parser was built locally from reviewed source using official Rust tools
+from static.rust-lang.org, verified against the official SHA-256 manifest.
+The Windows UI uses the system Microsoft .NET Framework compiler.
+Cargo.lock fixes 72 external packages. Their versions were covered by an OSV
+query of 73 packages on the review date; no known advisories were returned.
+Downloaded crate archives were verified against the Cargo.lock SHA-256 values.
+Relevant build scripts were inspected before the offline build. Version and
+platform checks were found; no unexpected network download step was identified.
+The personal-only interface and average/projection feature add no dependencies.
+The public parser build remaps local source paths so embedded diagnostic strings
+do not expose the developer's home or project directory.
+
+Antivirus and validation
+The system Defender scanner had a valid Microsoft Windows digital signature.
+Microsoft Defender found no threats in the reviewed source and built app during
+the initial review. The updated distribution is scanned again before delivery.
+This is a local custom scan; system protection settings are not disabled.
+No replay files or statistics were manually uploaded to VirusTotal or another
+public analysis service. OSV received only public package names and versions.
+The parser libraries passed 38 tests. Storage and UI checks cover duplicate
+imports, backup recovery, old personal history, average/projection arithmetic,
+empty histories, forecast rounding, and personal-only parser output.
+Completed Fortnite 43.10 recordings were used locally for compatibility checks;
+real recordings, player names, account IDs, match IDs, and local statistics are
+not included as repository fixtures or in the public application screenshot.
+
+GitHub and archive boundaries
+.gitignore excludes data/, recordings, JSON results, CSV exports, backups, and
+build outputs. source/check-public-files.ps1 rejects those paths in the Git file
+list. source/package.ps1 archives that reviewed file list and only explicitly
+adds the three required runtime files to the portable ZIP. It does not recurse
+through the application folder, and rejects symbolic links/reparse points.
+The existing data folder is preserved locally and is not part of either ZIP.
+
+Limitations
+No intentional malicious behavior was found in the reviewed source, and Defender
+reported no threats. This is not a formal security audit or an absolute guarantee
+against all bugs, unknown vulnerabilities, or future dependency issues.
+The application is not publisher-code-signed. A SHA-256 checksum verifies file
+integrity relative to a particular build; it does not prove that code is safe.
+Successful packet decoding does not guarantee complete personal chest counts.
+Missing events can lower the average used for forecasts. Destruction of a supporting floor
+has not yet been checked against a controlled in-game recording.
